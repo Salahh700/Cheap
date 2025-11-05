@@ -47,24 +47,24 @@ body {
 }
 
 .btn-primary {
-    background-color: #3b82f6;
+    background-color: #4F46E5;
     color: white;
-    border-color: #3b82f6;
+    border-color: #4F46E5;
 }
 
 .btn-primary:hover {
-    background-color: #2563eb;
-    border-color: #2563eb;
+    background-color: #4338CA;
+    border-color: #4338CA;
 }
 
 .btn-outline {
     background-color: transparent;
-    color: #3b82f6;
-    border-color: #3b82f6;
+    color: #4F46E5;
+    border-color: #4F46E5;
 }
 
 .btn-outline:hover {
-    background-color: #3b82f6;
+    background-color: #4F46E5;
     color: white;
 }
 
@@ -76,7 +76,7 @@ body {
 
 .btn-secondary:hover {
     background-color: white;
-    color: #3b82f6;
+    color: #4F46E5;
 }
 
 /* Header */
@@ -99,7 +99,7 @@ body {
 .logo-text {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #3b82f6;
+    color: #4F46E5;
     display: flex;
     align-items: center;
 }
@@ -111,7 +111,7 @@ body {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
     color: white;
     padding: 4rem 0;
 }
@@ -180,7 +180,7 @@ body {
 .stat-number {
     font-size: 1.875rem;
     font-weight: bold;
-    color: #3b82f6;
+    color: #4F46E5;
     margin-bottom: 0.5rem;
 }
 
@@ -238,7 +238,7 @@ body {
 }
 
 .feature-icon-primary {
-    background-color: #3b82f6;
+    background-color: #4F46E5;
 }
 
 .feature-icon-accent {
@@ -352,7 +352,7 @@ html {
 /* Focus styles for accessibility */
 .btn:focus,
 .footer-link:focus {
-    outline: 2px solid #3b82f6;
+    outline: 2px solid #4F46E5;
     outline-offset: 2px;
 }
 

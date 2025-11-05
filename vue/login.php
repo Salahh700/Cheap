@@ -14,6 +14,7 @@ $bdd = new PDO('mysql:host=localhost;dbname=cheap', 'root', '');
     <title><?php echo $site_name ?> - Connectez-vous</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style/modern.css">
+    <link rel="stylesheet" href="../style/enhanced-styles.css">
     <script src="../style/app.js" defer></script>
 </head>
 <body>
