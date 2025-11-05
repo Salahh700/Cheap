@@ -1,0 +1,64 @@
+<?php
+session_start();
+$site_name = "Cheap";
+$current_year = date('Y');
+
+// Connexion à la BDD
+$bdd = new PDO('mysql:host=localhost;dbname=cheap', 'root', '');
+
+// Vérifier que c’est bien l’admin
+if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != 1) {
+    header('Location: login.php');
+    exit();
+}
+
+// Récupérer tous les utilisateurs sauf l’admin
+$query = $bdd->query("SELECT * FROM users WHERE id_user != 1");
+$users = $query->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion des utilisateurs</title>
+    <style>
+        body { font-family: Arial; padding: 2rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        a { text-decoration: none; color: #FF5A5F; font-weight: bold; }
+        a:hover { text-decoration: underline; }
+        .back { margin-bottom: 1rem; display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <a class="back" href="paneladmin.php">← Retour au panneau admin</a>
+    <h1>👤 Liste des utilisateurs</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Date d'inscription</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($users as $user): ?>
+                <tr>
+                    <td><?= htmlspecialchars($user['id_user']) ?></td>
+                    <td><?= htmlspecialchars($user['mail_user']) ?></td>
+                    <td><?= htmlspecialchars($user['date_inscription_user']) ?></td>
+                    <td>
+                        <a href="../controller/controllerdeleteuser.php?id_user=<?= $user['id_user'] ?>" onclick="return confirm('Confirmer la suppression de cet utilisateur ?')">Supprimer</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+</body>
+</html>
