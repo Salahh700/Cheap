@@ -18,6 +18,7 @@ if (!isset($_SESSION['user_id'])) {
     <title>Cheap - Nos abonnements premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style/modern.css">
+    <link rel="stylesheet" href="../style/enhanced-styles.css">
     <script src="../style/app.js" defer></script>
 </head>
 <body>

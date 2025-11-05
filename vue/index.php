@@ -17,6 +17,8 @@ $current_year = date('Y');
     <meta property="og:type" content="website">
     
     <link rel="stylesheet" href="../style/index.css">
+    <link rel="stylesheet" href="../style/enhanced-styles.css">
+    <script src="../style/app.js" defer></script>
 </head>
 <body>
     <!-- Header -->
@@ -57,22 +59,22 @@ $current_year = date('Y');
     </section>
 
     <!-- Stats Section -->
-    <section class="stats">
+    <section class="stats particles-bg">
         <div class="container">
             <div class="stats-grid">
-                <div class="stat-item">
+                <div class="stat-item fade-in-up">
                     <div class="stat-number">100-1000</div>
                     <div class="stat-label">Comptes actifs</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item fade-in-up">
                     <div class="stat-number">15+</div>
                     <div class="stat-label">Types de services</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item fade-in-up">
                     <div class="stat-number">24/7</div>
                     <div class="stat-label">Support</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item fade-in-up">
                     <div class="stat-number">99.9%</div>
                     <div class="stat-label">Disponibilité</div>
                 </div>
@@ -89,23 +91,23 @@ $current_year = date('Y');
             </div>
 
             <div class="features-grid">
-                <div class="feature-item">
+                <div class="feature-item lift-hover scale-in">
                     <div class="feature-icon feature-icon-primary">
                         🛡️
                     </div>
                     <h3 class="feature-title">Paiements sécurisés</h3>
                     <p class="feature-description">Toutes les transactions sont cryptées et sécurisées avec une protection SSL</p>
                 </div>
-                
-                <div class="feature-item">
+
+                <div class="feature-item lift-hover scale-in">
                     <div class="feature-icon feature-icon-accent">
                         ⚡
                     </div>
                     <h3 class="feature-title">Livraison instantanée</h3>
                     <p class="feature-description">Recevez vos identifiants de compte instantanément après l'achat par mail</p>
                 </div>
-                
-                <div class="feature-item">
+
+                <div class="feature-item lift-hover scale-in">
                     <div class="feature-icon feature-icon-orange">
                         🎧
                     </div>
