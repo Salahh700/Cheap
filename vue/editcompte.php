@@ -1,9 +1,22 @@
 <?php
 session_start();
-$bdd = new PDO('mysql:host=localhost;dbname=cheap', 'root', '');
-if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != 1) {
+
+// Charger la configuration
+define('APP_ACCESS', true);
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/Database.php';
+
+// Vérification de l'accès admin
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['type_user']) || $_SESSION['type_user'] !== 'admin') {
     header('Location: login.php');
     exit();
+}
+
+// Connexion à la base de données
+try {
+    $bdd = pdo();
+} catch (PDOException $e) {
+    die("Erreur de connexion à la base de données : " . $e->getMessage());
 }
 
 if (!isset($_GET['id'])) {

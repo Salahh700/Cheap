@@ -1,19 +1,29 @@
 <?php
 session_start();
+
+// Charger la configuration
+define('APP_ACCESS', true);
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/Database.php';
+
 $site_name = "Cheap";
 $current_year = date('Y');
 
-// Connexion à la BDD
-$bdd = new PDO('mysql:host=localhost;dbname=cheap', 'root', '');
-
-// Vérifier que c’est bien l’admin
-if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != 1) {
+// Vérifier que c'est bien l'admin
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['type_user']) || $_SESSION['type_user'] !== 'admin') {
     header('Location: login.php');
     exit();
 }
 
-// Récupérer tous les utilisateurs sauf l’admin
-$query = $bdd->query("SELECT * FROM users WHERE id_user != 1");
+// Connexion à la base de données
+try {
+    $bdd = pdo();
+} catch (PDOException $e) {
+    die("Erreur de connexion à la base de données : " . $e->getMessage());
+}
+
+// Récupérer tous les utilisateurs (les admins peuvent voir tous les users)
+$query = $bdd->query("SELECT * FROM users ORDER BY id_user");
 $users = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 

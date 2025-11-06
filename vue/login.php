@@ -3,7 +3,6 @@ session_start();
 
 $site_name = "Cheap";
 $current_year = date('Y');
-$bdd = new PDO('mysql:host=localhost;dbname=cheap', 'root', '');
 ?>
 
 <!DOCTYPE html>

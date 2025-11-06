@@ -1,9 +1,10 @@
 <?php
 session_start();
 
-// Connexion à la base de données
-$bdd = new PDO('mysql:host=localhost;dbname=cheap', 'root', '');
-$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Charger la configuration
+define('APP_ACCESS', true);
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/Database.php';
 
 $site_name = "Cheap";
 
@@ -11,6 +12,13 @@ $site_name = "Cheap";
 if (!isset($_SESSION['user_id'])) {
     echo "Vous devez être connecté pour voir cette page.";
     exit();
+}
+
+// Connexion à la base de données
+try {
+    $bdd = pdo();
+} catch (PDOException $e) {
+    die("Erreur de connexion à la base de données : " . $e->getMessage());
 }
 
 // Vérifie que l'ID de la commande est fourni
