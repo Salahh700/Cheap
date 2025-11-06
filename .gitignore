@@ -1,1 +1,30 @@
+# Dépendances Composer
 /vendor/
+
+# Fichiers d'environnement (SENSIBLES - NE JAMAIS COMMITER)
+.env
+.env.local
+.env.*.local
+
+# Logs
+/logs/
+*.log
+
+# Fichiers temporaires
+/tmp/
+/temp/
+
+# Fichiers systèmes
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Cache
+/cache/
+*.cache
