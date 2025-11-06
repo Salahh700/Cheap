@@ -69,8 +69,8 @@ try {
     // Hachage sécurisé du mot de passe
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insertion dans la base de données (sans created_at si la colonne n'existe pas)
-    $requete = "INSERT INTO users (username_user, mail_user, password_user, type_user) VALUES (?, ?, ?, 'user')";
+    // Insertion dans la base de données avec date_inscription_user
+    $requete = "INSERT INTO users (username_user, mail_user, password_user, type_user, date_inscription_user) VALUES (?, ?, ?, 'user', NOW())";
     $stmt = $bdd->prepare($requete);
     $stmt->execute([$username, $mail, $hashedPassword]);
 
