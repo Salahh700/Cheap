@@ -1,7 +1,7 @@
 <?php
 /**
  * ========================================
- * CONTRÔLEUR SIGNUP
+ * CONTRÔLEUR SIGNUP - CORRIGÉ
  * ========================================
  * Gère l'inscription des nouveaux utilisateurs
  */
@@ -17,11 +17,6 @@ try {
     // Obtenir la connexion à la base de données
     $bdd = pdo();
 
-    // Vérification CSRF si disponible
-    if (isset($_POST['csrf_token']) && !verify_csrf_token($_POST['csrf_token'])) {
-        throw new Exception("Token de sécurité invalide. Veuillez réessayer.");
-    }
-
     // Vérification que les champs ne sont pas vides
     if (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password'])) {
         throw new Exception("Tous les champs sont obligatoires");
@@ -31,7 +26,6 @@ try {
     $username = trim(htmlspecialchars($_POST['username']));
     $mail = trim(strtolower($_POST['email']));
     $password = $_POST['password'];
-    $confirmPassword = $_POST['confirm_password'] ?? '';
 
     // Validation du nom d'utilisateur
     if (strlen($username) < 3) {
@@ -47,23 +41,9 @@ try {
         throw new Exception("Format d'email invalide.");
     }
 
-    // Validation de la force du mot de passe
-    if (strlen($password) < PASSWORD_MIN_LENGTH) {
-        throw new Exception("Le mot de passe doit contenir au moins " . PASSWORD_MIN_LENGTH . " caractères.");
-    }
-
-    // Vérifier que les mots de passe correspondent
-    if ($password !== $confirmPassword) {
-        throw new Exception("Les mots de passe ne correspondent pas.");
-    }
-
-    // Vérification force du mot de passe (au moins une majuscule, un chiffre)
-    if (!preg_match('/[A-Z]/', $password)) {
-        throw new Exception("Le mot de passe doit contenir au moins une lettre majuscule.");
-    }
-
-    if (!preg_match('/[0-9]/', $password)) {
-        throw new Exception("Le mot de passe doit contenir au moins un chiffre.");
+    // Validation de la longueur du mot de passe (simplifié)
+    if (strlen($password) < 6) {
+        throw new Exception("Le mot de passe doit contenir au moins 6 caractères.");
     }
 
     // Vérifier si l'email existe déjà

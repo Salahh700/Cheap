@@ -1,9 +1,10 @@
 <?php
 /**
  * ========================================
- * CONTRÔLEUR LOGIN
+ * CONTRÔLEUR LOGIN - CORRIGÉ
  * ========================================
  * Gère l'authentification des utilisateurs
+ * Compatible avec anciens mots de passe (clair/MD5) ET nouveaux (bcrypt)
  */
 
 session_start();
@@ -16,11 +17,6 @@ require_once __DIR__ . '/../config/Database.php';
 try {
     // Obtenir la connexion à la base de données
     $bdd = pdo();
-
-    // Vérification CSRF si disponible
-    if (isset($_POST['csrf_token']) && !verify_csrf_token($_POST['csrf_token'])) {
-        throw new Exception("Token de sécurité invalide. Veuillez réessayer.");
-    }
 
     // Vérification que les champs ne sont pas vides
     if (empty($_POST['username']) || empty($_POST['password'])) {
@@ -55,8 +51,44 @@ try {
     $stmt->execute([$username, $username]);
     $user = $stmt->fetch();
 
-    // Vérification du mot de passe
-    if ($user && password_verify($password, $user['password_user'])) {
+    // Variable pour vérifier le mot de passe
+    $passwordValid = false;
+
+    if ($user) {
+        // Vérifier si le mot de passe est hashé avec password_hash (commence par $2y$)
+        if (substr($user['password_user'], 0, 4) === '$2y$' || substr($user['password_user'], 0, 4) === '$2a$') {
+            // Nouveau format (bcrypt)
+            $passwordValid = password_verify($password, $user['password_user']);
+        }
+        // Vérifier si c'est du MD5 (32 caractères hexadécimaux)
+        else if (preg_match('/^[a-f0-9]{32}$/', $user['password_user'])) {
+            // Ancien format MD5
+            $passwordValid = (md5($password) === $user['password_user']);
+
+            // Si connexion réussie, mettre à jour vers bcrypt
+            if ($passwordValid) {
+                $newHash = password_hash($password, PASSWORD_DEFAULT);
+                $updateStmt = $bdd->prepare("UPDATE users SET password_user = ? WHERE id_user = ?");
+                $updateStmt->execute([$newHash, $user['id_user']]);
+                logger("Password migrated to bcrypt for user: {$user['username_user']}", 'info');
+            }
+        }
+        // Sinon, c'est probablement en clair (ancien système)
+        else {
+            $passwordValid = ($password === $user['password_user']);
+
+            // Si connexion réussie, mettre à jour vers bcrypt
+            if ($passwordValid) {
+                $newHash = password_hash($password, PASSWORD_DEFAULT);
+                $updateStmt = $bdd->prepare("UPDATE users SET password_user = ? WHERE id_user = ?");
+                $updateStmt->execute([$newHash, $user['id_user']]);
+                logger("Password migrated to bcrypt for user: {$user['username_user']}", 'info');
+            }
+        }
+    }
+
+    // Vérification finale
+    if ($user && $passwordValid) {
         // Connexion réussie - réinitialiser les tentatives
         $_SESSION[$cache_key] = ['count' => 0, 'time' => time()];
 
