@@ -1,36 +1,21 @@
 <?php
-// Solution temporaire en attendant l'installation de Composer
-if (!file_exists('../vendor/autoload.php')) {
-    // Vérifier si le dossier vendor existe, sinon le créer
-    if (!is_dir('../vendor')) {
-        mkdir('../vendor', 0777, true);
-    }
-    
-    // Message d'instructions
-    echo "Veuillez suivre ces étapes pour installer les dépendances :<br>";
-    echo "1. Téléchargez Composer depuis https://getcomposer.org/download/<br>";
-    echo "2. Installez Composer<br>";
-    echo "3. Ouvrez un terminal dans le dossier C:/xampp/htdocs/Cheap<br>";
-    echo "4. Exécutez la commande : composer install<br>";
-    exit();
-}
-
-require '../vendor/autoload.php';
-
-// Chargement des variables d'environnement
-use Dotenv\Dotenv;
-
-$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->load();
-
-// Configuration de Stripe avec la clé depuis .env
-\Stripe\Stripe::setApiKey($_ENV['STRIPE_API_KEY']);
+/**
+ * ========================================
+ * STRIPE CHECKOUT - CORRIGÉ
+ * ========================================
+ * Gère la création de session de paiement Stripe
+ */
 
 session_start();
 
+// Charger la configuration
+define('APP_ACCESS', true);
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/Database.php';
+
 // Vérifie si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../vue/login.php");
+    redirect('../vue/login.php');
     exit();
 }
 
@@ -42,15 +27,21 @@ if (!isset($_POST['id_produit'])) {
 
 $id_produit = intval($_POST['id_produit']);
 
-// Connexion à la base avec les variables d'environnement
+// Charger Stripe via vendor/autoload si disponible
+if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    die("Erreur : Les dépendances Stripe ne sont pas installées. Veuillez exécuter 'composer install' dans le dossier racine.");
+}
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Configuration de Stripe avec la clé depuis .env
+\Stripe\Stripe::setApiKey(env('STRIPE_API_KEY'));
+
+// Connexion à la base de données via notre système
 try {
-    $bdd = new PDO(
-        'mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'] . ';charset=utf8',
-        $_ENV['DB_USER'],
-        $_ENV['DB_PASS']
-    );
-    $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $bdd = pdo();
 } catch (PDOException $e) {
+    logger('Database connection error in checkout: ' . $e->getMessage(), 'error');
     die("Erreur de connexion à la base de données : " . $e->getMessage());
 }
 
@@ -70,7 +61,7 @@ try {
     $host = $_SERVER['HTTP_HOST'];
     $base_path = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/');
     $base_url = $protocol . "://" . $host . $base_path;
-    
+
     // Créer la session de paiement Stripe
     $checkout_session = \Stripe\Checkout\Session::create([
         'payment_method_types' => ['card'],
@@ -94,11 +85,14 @@ try {
         ]
     ]);
 
+    // Logger la création de la session
+    logger("Stripe checkout session created for user {$_SESSION['user_id']}, product {$id_produit}", 'info');
+
     // Redirection vers Stripe
     header("Location: " . $checkout_session->url);
     exit();
 } catch (Exception $e) {
-    error_log("Erreur Stripe : " . $e->getMessage());
+    logger("Stripe checkout error: " . $e->getMessage(), 'error');
     echo "Une erreur est survenue lors de la création de la session de paiement. Veuillez réessayer.";
     exit();
 }
