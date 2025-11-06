@@ -2,7 +2,8 @@
 session_start();
 
 $site_name = "Cheap";
-$current_year = date('Y');
+$page_title = "$site_name - Connexion";
+$current_page = 'login';
 ?>
 
 <!DOCTYPE html>
@@ -10,82 +11,87 @@ $current_year = date('Y');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $site_name ?> - Connectez-vous</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../style/modern.css">
-    <link rel="stylesheet" href="../style/enhanced-styles.css">
-    <script src="../style/app.js" defer></script>
+    <title><?php echo $page_title; ?></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style/unified-theme.css">
 </head>
 <body>
-    <div class="container">
-        <nav>
-            <ul>
-                <li><a href="index.php">Accueil</a></li>
-                <li><a href="signup.php">S'inscrire</a></li>
-            </ul>
-        </nav>
+    <?php include __DIR__ . '/../includes/unified-header.php'; ?>
 
-        <div class="form-container">
-            <form action="../controller/controllerlogin.php" method="POST" class="auth-form">
-                <h1>Connectez-vous</h1>
-                
-                <div class="form-group">
-                    <label for="username">Nom d'utilisateur ou Email :</label>
-                    <input type="text" id="username" name="username" required>
+    <div class="main-content">
+        <div class="container-unified" style="max-width: 480px;">
+            <div class="card-unified fade-in-unified">
+                <div class="card-unified-header text-center">
+                    <h1 class="card-unified-title" style="font-size: 28px;">Bon retour ! 👋</h1>
+                    <p class="card-unified-subtitle">Connectez-vous pour accéder à vos comptes premium</p>
                 </div>
 
-                <div class="form-group">
-                    <label for="password">Mot de passe :</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
+                <form action="../controller/controllerlogin.php" method="POST" class="form-unified">
+                    <div class="form-group-unified">
+                        <label for="username" class="form-label-unified">
+                            📧 Nom d'utilisateur ou Email
+                        </label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="form-input-unified"
+                            placeholder="Entrez votre username ou email"
+                            required
+                            autocomplete="username"
+                        >
+                    </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn">Se connecter</button>
-                    <a href="forgetpassword.php" class="btn btn-secondary">Mot de passe oublié ?</a>
-                </div>
-                
-                <p class="form-footer">
-                    Pas encore inscrit? <a href="signup.php">S'inscrire</a>
+                    <div class="form-group-unified">
+                        <label for="password" class="form-label-unified">
+                            🔒 Mot de passe
+                        </label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-input-unified"
+                            placeholder="Entrez votre mot de passe"
+                            required
+                            autocomplete="current-password"
+                        >
+                    </div>
+
+                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl);">
+                        <button type="submit" class="btn-unified btn-unified-primary" style="flex: 1;">
+                            Se connecter
+                        </button>
+                    </div>
+
+                    <div style="text-align: center; margin-top: var(--spacing-lg);">
+                        <a href="forgetpassword.php" style="color: var(--text-secondary); font-size: 14px; text-decoration: none;">
+                            Mot de passe oublié ?
+                        </a>
+                    </div>
+
+                    <div style="text-align: center; margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-color);">
+                        <span style="color: var(--text-secondary); font-size: 14px;">
+                            Pas encore de compte ?
+                        </span>
+                        <a href="signup.php" style="color: var(--primary-color); font-weight: 600; text-decoration: none; margin-left: 4px;">
+                            S'inscrire gratuitement
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Avantages -->
+            <div style="margin-top: var(--spacing-2xl); text-align: center;">
+                <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: var(--spacing-md);">
+                    ✨ Plus de 1000 clients satisfaits
                 </p>
-            </form>
+                <div style="display: flex; justify-content: center; gap: var(--spacing-lg); flex-wrap: wrap;">
+                    <span class="badge-unified badge-primary">🔒 Paiement Sécurisé</span>
+                    <span class="badge-unified badge-success">⚡ Livraison Instantanée</span>
+                    <span class="badge-unified badge-primary">💎 Comptes Premium</span>
+                </div>
+            </div>
         </div>
     </div>
-
-    <style>
-        .form-container {
-            max-width: 400px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: var(--white);
-            border-radius: 0.5rem;
-            box-shadow: var(--shadow);
-        }
-        
-        .auth-form h1 {
-            margin-bottom: 2rem;
-            text-align: center;
-            color: var(--primary-color);
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .form-footer {
-            margin-top: 1.5rem;
-            text-align: center;
-        }
-        
-        .form-footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-        
-        .form-footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </body>
 </html>
